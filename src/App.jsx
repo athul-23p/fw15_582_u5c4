@@ -1,3 +1,4 @@
+import { Link, Route, Routes } from "react-router-dom";
 import { Home } from "./components/Home";
 import { Login } from "./components/Login";
 import { Logout } from "./components/Logout";
@@ -30,6 +31,11 @@ function App() {
         /orders     Orders    Protected
         /neworder   NewOrder  Protected
         */}
+        <Route path="/"  element={<Home/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/logout" element={<Logout/>} />
+        <Route path="/orders" element={<ProtectedRoute><Orders/></ProtectedRoute>}/>
+        <Route path="/neworder" element={<ProtectedRoute><NewOrder/></ProtectedRoute>} />
       </Routes>
     </div>
   );
