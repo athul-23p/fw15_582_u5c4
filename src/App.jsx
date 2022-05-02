@@ -17,17 +17,15 @@ function App() {
           Home
         </Link>
         {/* Show either login or logout below */}
-        {
-          // if(auth.isLoggedIn){
-
-          // }
-        }
-        <Link className="nav-logout" to="/logout">
-          Logout
-        </Link>
-        <Link className="nav-login" to="/login">
-          Login
-        </Link>
+        {auth.isLoggedIn ? (
+          <Link className="nav-logout" to="/logout">
+            Logout
+          </Link>
+        ) : (
+          <Link className="nav-login" to="/login">
+            Login
+          </Link>
+        )}
       </div>
 
       <Routes>
@@ -39,11 +37,25 @@ function App() {
         /orders     Orders    Protected
         /neworder   NewOrder  Protected
         */}
-        <Route path="/"  element={<Home/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/logout" element={<Logout/>} />
-        <Route path="/orders" element={<ProtectedRoute><Orders/></ProtectedRoute>}/>
-        <Route path="/neworder" element={<ProtectedRoute><NewOrder/></ProtectedRoute>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/neworder"
+          element={
+            <ProtectedRoute>
+              <NewOrder />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );
