@@ -1,7 +1,22 @@
+import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { addProducts } from "../Redux/Product/actions";
+
 export const Orders = () => {
   //  Get all data when admin logs in and populate it
   // store it in redux
-
+  console.log("orders")
+  const dispatch = useDispatch();
+  const getData = (data) => {
+    dispatch(addProducts(data));
+  };
+  useEffect(() => {
+    axios.get("http://localhost:8080/orders").then((res) => {
+      console.log(res);
+      getData(res.data);
+    });
+  }, []);
   return (
     <div>
       <div>
