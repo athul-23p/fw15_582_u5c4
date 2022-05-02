@@ -4,10 +4,11 @@ export const CHANGE_STATUS = "CHANGE_STATUS";
 export const SORT = "SORT";
 
 // Action Creators
-const addProducts = (products) =>{
+const addProducts = (orders) =>{
+    // console.log(orders)
     return {
         type:ADD_PRODUCTS,
-        payload: products
+        payload:orders
     }
 }
 
