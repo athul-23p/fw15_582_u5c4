@@ -1,7 +1,29 @@
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { addProducts, ADD_PRODUCTS } from "../Redux/Product/actions";
+
 export const NewOrder = () => {
   // Get data of only this user. store it in redux
   // GET /orders?owner_name=john will give you all order of user john
   //  on submit click create a new order, new order has status `Not Accepted`
+  const { user } = useSelector((store) => store.auth);
+
+  const orders = useSelector((store) => store.orders.orders);
+  const [filter,setFilter] = useState(true);
+
+  const dispatch = useDispatch();
+  const getData = (data) => {
+    dispatch(addProducts(data));
+  };
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/orders?owner_name=" + user.username)
+      .then(({ data }) => {
+        getData(data);
+      });
+  }, []);
+
   return (
     <div>
       <div className="form">
@@ -17,6 +39,7 @@ export const NewOrder = () => {
           type="text"
           name="owner_name"
           placeholder="yourname"
+          value={user.username}
           readOnly
         />
         <input
@@ -34,17 +57,21 @@ export const NewOrder = () => {
         {/* it's just a toggle of redux state something like `showUnfinished`  */}
         <button className="filter">
           {/* Text should change like:   Show {showUnfinished ? "all" : "Only unfinished"} */}
+          { filter ? "Only unfinished" : "showUnfinished"}
         </button>
 
         {/* Here create a div for every oreder, filter them before based on `showUnfinished` */}
-        <div className="past-orders">
-          <span className="id"></span>. <span className="problem"></span>{" "}
-          <span className="cost">
-            {/* if status is not accepted then keep it empty otherwise show cost like $1234 */}
-          </span>
-          <p className="status">Status: </p>
-          <hr />
-        </div>
+        {orders.map((order) => (
+          <div className="past-orders">
+            <span className="id">{order.id}</span>. <span className="problem">{order.problem}</span>{" "}
+            <span className="cost">
+              {/* if status is not accepted then keep it empty otherwise show cost like $1234 */}
+              { order.status !== "Not Accepted"? "$"+order.cost : ""}
+            </span>
+            <p className="status">Status: {order.status} </p>
+            <hr />
+          </div>
+        ))}
       </div>
     </div>
   );
