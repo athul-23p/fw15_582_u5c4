@@ -5,10 +5,17 @@ const init = {orders:[]};
 export const productReducer = (store = init, { type, payload }) => {
   switch (type) {
     case ADD_PRODUCTS:
-      // console.log("rd",payload);
       return {orders:payload}
-    case SORT:
-      return store;
+      case SORT:
+      console.log("rd",payload);
+      console.log(store);
+      const sortedOrders = store.orders.sort((a,b) => {
+        if(a[payload] < b[payload]) return 1;
+        else if(a[payload] > b[payload]) return -1;
+        return 0;
+      })
+      console.log(sortedOrders);
+      return {...store,orders: sortedOrders}
     default:
       return store;
   }

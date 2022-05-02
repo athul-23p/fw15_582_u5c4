@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addProducts } from "../Redux/Product/actions";
+import { addProducts, sort } from "../Redux/Product/actions";
 
 export const Orders = () => {
   //  Get all data when admin logs in and populate it
@@ -17,12 +17,17 @@ export const Orders = () => {
       getData(res.data);
     });
   }, []);
-  // console.log(orders);
+  
+  const handleSort =(e) => {
+    const value = e.target.value;
+    dispatch(sort(value));
+  }
+ 
   return (
     <div>
       <div>
         <div>
-          <select className="controls" name="progress" id="progress">
+          <select className="controls" name="progress" id="progress" onChange={handleSort}>
             <option value="id">ID</option>
             <option value="status">Status</option>
             <option value="cost">Cost</option>
@@ -45,7 +50,7 @@ export const Orders = () => {
               <tr className="orders-row" key={order.id}>
                 <td className="id">{order.id}</td>
                 <td className="problem">{order.problem}</td>
-                <td className="owner">{order.client}</td>
+                <td className="owner">{order.owner_name}</td>
                 <td className="status">{order.status}</td>
                 <td className="cost">{order.cost}</td>
                 <td className="change-status">

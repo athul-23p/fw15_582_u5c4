@@ -10,12 +10,24 @@ export const NewOrder = () => {
   const { user } = useSelector((store) => store.auth);
 
   const orders = useSelector((store) => store.orders.orders);
-  const [filter,setFilter] = useState(true);
+  const [filter, setFilter] = useState(true);
+  const [formData, setFormData] = useState({
+    problem: "",
+    owner_name: user.username,
+    brand: "",
+    status: "Not Accepted",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const dispatch = useDispatch();
   const getData = (data) => {
     dispatch(addProducts(data));
   };
+
   useEffect(() => {
     axios
       .get("http://localhost:8080/orders?owner_name=" + user.username)
@@ -23,7 +35,14 @@ export const NewOrder = () => {
         getData(data);
       });
   }, []);
-
+  const handleSubmit = () => {
+    axios.post("http://localhost:8080/orders", formData);
+    axios
+      .get("http://localhost:8080/orders?owner_name=" + user.username)
+      .then(({ data }) => {
+        getData(data);
+      });
+  };
   return (
     <div>
       <div className="form">
@@ -32,6 +51,7 @@ export const NewOrder = () => {
           type="text"
           name="problem"
           placeholder="Enter problem"
+          onChange={handleChange}
         />
         {/* This input is readonly, it's coming from redux */}
         <input
@@ -47,9 +67,12 @@ export const NewOrder = () => {
           type="text"
           name="brand"
           placeholder="Enter brand name"
+          onChange={handleChange}
         />
         {/* Create new problem, show it in below form immediately */}
-        <button className="submit">submit</button>
+        <button className="submit" onClick={handleSubmit}>
+          submit
+        </button>
       </div>
 
       <div className="pastOrders">
@@ -57,16 +80,17 @@ export const NewOrder = () => {
         {/* it's just a toggle of redux state something like `showUnfinished`  */}
         <button className="filter">
           {/* Text should change like:   Show {showUnfinished ? "all" : "Only unfinished"} */}
-          { filter ? "Only unfinished" : "showUnfinished"}
+          {filter ? "Only unfinished" : "showUnfinished"}
         </button>
 
         {/* Here create a div for every oreder, filter them before based on `showUnfinished` */}
         {orders.map((order) => (
-          <div className="past-orders">
-            <span className="id">{order.id}</span>. <span className="problem">{order.problem}</span>{" "}
+          <div className="past-orders" key={order.id}>
+            <span className="id">{order.id}</span>.{" "}
+            <span className="problem">{order.problem}</span>{" "}
             <span className="cost">
               {/* if status is not accepted then keep it empty otherwise show cost like $1234 */}
-              { order.status !== "Not Accepted"? "$"+order.cost : ""}
+              {order.status !== "Not Accepted" ? "$" + order.cost : ""}
             </span>
             <p className="status">Status: {order.status} </p>
             <hr />
