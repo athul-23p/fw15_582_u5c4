@@ -1,3 +1,4 @@
+import { useSelector, useStore } from "react-redux";
 import { Link, Route, Routes } from "react-router-dom";
 import { Home } from "./components/Home";
 import { Login } from "./components/Login";
@@ -7,6 +8,8 @@ import { Orders } from "./components/Orders";
 import { ProtectedRoute } from "./components/ProtextedRoute";
 
 function App() {
+
+  const auth = useSelector(store => store.auth);
   return (
     <div className="App">
       <div>
@@ -14,6 +17,11 @@ function App() {
           Home
         </Link>
         {/* Show either login or logout below */}
+        {
+          // if(auth.isLoggedIn){
+
+          // }
+        }
         <Link className="nav-logout" to="/logout">
           Logout
         </Link>

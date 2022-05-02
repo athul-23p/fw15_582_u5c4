@@ -1,3 +1,13 @@
-import { legacy_createStore } from "redux";
+import { legacy_createStore, combineReducers } from "redux";
+import authReducer from "./Auth/reducer";
+import { productReducer } from "./Product/reducer";
 
-export const store = legacy_createStore(reducer);
+const rootReducer = combineReducers({
+  auth: authReducer,
+  products: productReducer,
+});
+
+export const store = legacy_createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
